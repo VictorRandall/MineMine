@@ -62,8 +62,32 @@ impl State {
 		let render_pipeline = device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
 			label: Some("Render Pipeline"),
 			layout: Some(&render_pipeline_layout),
-			vertex
-		}),
+			vertex: wgpu::VertexState {
+				module: &shader,
+				entry_point: "vs_main",
+				buffers: &[],
+			},
+			fragment: Some(wgpu::FragmenState {
+				module: &shader,
+				entry_point: "fs_main",
+				targets: &[wgpu::ColorTargetState {
+					format: config.format,
+					blend: Some(wgpu::BlendState::REPLACE),
+					write_mask: wgpu::ColorWrites::ALL,
+				}],
+			}),
+			primitive: wgpu::PrimitiveState {
+				topology: wgpu::PrimitiveTopology::TriangleList,
+				strip_index_format: None,
+				front_face: wgpu::FrontFace::Ccw,
+				cull_mode: Some(wgpu::Face::Back),
+				polygon_mode: wgpu::PolygonMode::Fill,
+				unclipped_depth: false,
+				conservative: false,
+			},
+			depth_stencil: None,
+			multisample:
+		});
 		
 		Self {
 			surface,
