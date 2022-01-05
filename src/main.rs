@@ -47,7 +47,7 @@ impl State {
 		};
 		surface.configure(&device, &config);
 		
-		let shader = device	.create_shader_module(wgpu::ShaderModuleDescriptor {
+		let shader = device.create_shader_module(&wgpu::ShaderModuleDescriptor {
 			label: Some("Shader"),
 			source: wgpu::ShaderSource::Wgsl(include_str!("shader.wgsl").into()),
 		});
@@ -86,7 +86,7 @@ impl State {
 				conservative: false,
 			},
 			depth_stencil: None,
-			multisample:
+			multisample: wgpu //TODO
 		});
 		
 		Self {
@@ -95,6 +95,7 @@ impl State {
 			queue,
 			config,
 			size,
+			render_pipeline,
 		}
 	}
 	
@@ -141,6 +142,8 @@ impl State {
 				depth_stencil_attachment: None,
 			});
 		}
+		
+		//TODO	
 		
 		self.queue.submit(std::iter::once(encoder.finish()));
 		output.present();
